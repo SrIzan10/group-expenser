@@ -1,0 +1,1472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Group Payment Tracker</title>
+    <style>
+        :root {
+            --primary: #4a6da7;
+            --primary-dark: #345384;
+            --secondary: #57ba98;
+            --light: #f8f9fa;
+            --dark: #2c3e50;
+            --danger: #e74c3c;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --info: #3498db;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 20px 0;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        header h1 {
+            margin: 0;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .auth-section {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        h2 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            background-color: var(--primary);
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+        
+        .btn:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .btn-success {
+            background-color: var(--success);
+        }
+        
+        .btn-success:hover {
+            background-color: #27ae60;
+        }
+        
+        .btn-danger {
+            background-color: var(--danger);
+        }
+        
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #ddd;
+            border-radius: 4px 4px 0 0;
+            margin-right: 5px;
+        }
+        
+        .tab.active {
+            background-color: white;
+            border-bottom: 3px solid var(--secondary);
+            font-weight: 600;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        table th, table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        table th {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        tr:hover {
+            background-color: #e9ecef;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn-sm {
+            padding: 5px 10px;
+            font-size: 14px;
+        }
+        
+        .summary-box {
+            background-color: var(--light);
+            border-left: 5px solid var(--info);
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        
+        .summary-total {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-top: 10px;
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .loading {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border-left: 4px solid var(--primary);
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* New styles for the user list */
+        .user-list {
+            margin-top: 15px;
+        }
+        
+        .user-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            background-color: var(--light);
+            padding: 8px 12px;
+            border-radius: 4px;
+        }
+        
+        .user-item span {
+            flex-grow: 1;
+        }
+        
+        .user-item .btn-remove {
+            background-color: var(--danger);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 3px 8px;
+            cursor: pointer;
+        }
+        
+        .user-add {
+            display: flex;
+            margin-bottom: 15px;
+            gap: 10px;
+        }
+        
+        .user-add input {
+            flex-grow: 1;
+        }
+        
+        .user-add button {
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 15px;
+            cursor: pointer;
+        }
+        
+        .price-per-person {
+            background-color: #e9f7ef;
+            border-left: 4px solid var(--success);
+            padding: 10px;
+            margin-top: 15px;
+            border-radius: 4px;
+        }
+        
+        .price-per-person p {
+            margin: 5px 0;
+        }
+        
+        .price-calculation {
+            font-size: 18px;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .user-toggle {
+            display: flex;
+            align-items: center;
+            margin-left: 15px;
+        }
+        
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            margin-right: 15px;
+        }
+        
+        .checkbox-container input[type="checkbox"] {
+            width: auto;
+            margin-right: 5px;
+        }
+        
+        @media (max-width: 768px) {
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .tab {
+                margin-bottom: 5px;
+                border-radius: 4px;
+            }
+            
+            .actions {
+                flex-direction: column;
+            }
+        }
+
+        /* Payment mode toggle style */
+        .payment-mode {
+            margin-bottom: 15px;
+            background-color: var(--light);
+            padding: 10px;
+            border-radius: 4px;
+        }
+        
+        .payment-mode label {
+            display: inline-block;
+            margin-right: 15px;
+            margin-bottom: 0;
+        }
+        
+        .payment-mode input[type="radio"] {
+            width: auto;
+            margin-right: 5px;
+        }
+        
+        /* New style for per-person input */
+        .price-input-container {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+            background-color: #f2f8ff;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        
+        .price-input-container label {
+            margin-bottom: 0;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+        
+        .price-input-container input {
+            max-width: 150px;
+        }
+        
+        .auto-calculate {
+            margin-left: 15px;
+            font-style: italic;
+            color: var(--info);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Group Payment Tracker</h1>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="auth-section" id="auth-section">
+            <h2>Connect to Your Database</h2>
+            <div class="form-group">
+                <label for="api-url">API URL</label>
+                <input type="text" id="api-url" placeholder="e.g. https://baserow.io" value="https://baserow.io">
+            </div>
+            <div class="form-group">
+                <label for="api-token">API Token</label>
+                <input type="password" id="api-token" placeholder="Enter your database token">
+            </div>
+            <div class="form-group">
+                <input type="checkbox" id="remember-me" checked>
+                <label for="remember-me" style="display: inline-block;">Remember credentials</label>
+            </div>
+            <button id="connect-btn" class="btn">Connect</button>
+        </div>
+
+        <div id="app-content" class="hidden">
+            <div class="tabs">
+                <div class="tab active" data-tab="group-payments">Group Payments</div>
+                <div class="tab" data-tab="individual-payments">Individual Payments</div>
+                <div class="tab" data-tab="summary">Summary</div>
+            </div>
+
+            <div id="alerts"></div>
+
+            <div class="tab-content active" id="group-payments">
+                <div class="card">
+                    <h2>Add New Group Payment</h2>
+                    <form id="add-group-payment-form">
+                        <div class="form-group">
+                            <label for="group-name">Payment Name</label>
+                            <input type="text" id="group-name" required>
+                        </div>
+                        
+                        <!-- Payment mode selection -->
+                        <div class="form-group payment-mode">
+                            <label>Payment Mode:</label>
+                            <div>
+                                <input type="radio" id="split-equal" name="payment-mode" value="split-equal" checked>
+                                <label for="split-equal">Equal Split (Auto-calculate)</label>
+                                
+                                <input type="radio" id="per-person" name="payment-mode" value="per-person">
+                                <label for="per-person">Custom Per-Person</label>
+                            </div>
+                            
+                            <!-- Per-person price input for equal split -->
+                            <div id="per-person-container" class="price-input-container">
+                                <label for="per-person-price">Price per person (€):</label>
+                                <input type="number" id="per-person-price" step="0.01" min="0">
+                                <span class="auto-calculate" id="total-auto-calculate"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="group-amount">Total Amount</label>
+                            <input type="number" id="group-amount" step="0.01" min="0" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="group-notes">Notes</label>
+                            <textarea id="group-notes" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="group-paid">Paid Overall</label>
+                            <select id="group-paid">
+                                <option value="true">Yes</option>
+                                <option value="false" selected>No</option>
+                            </select>
+                        </div>
+                        
+                        <!-- New user management section -->
+                        <div class="form-group">
+                            <label>Split Between</label>
+                            <div class="user-add">
+                                <input type="text" id="new-user" placeholder="Add person...">
+                                <button type="button" id="add-user-btn">Add</button>
+                            </div>
+                            
+                            <div class="user-list" id="user-list">
+                                <!-- User items will be added here -->
+                                <div class="user-item">
+                                    <span>You (already paid)</span>
+                                    <div class="user-toggle">
+                                        <div class="checkbox-container">
+                                            <input type="checkbox" id="is-me-paid" checked disabled>
+                                            <label for="is-me-paid">Paid</label>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn-remove" disabled>✕</button>
+                                </div>
+                            </div>
+                            
+                            <div class="price-per-person">
+                                <p>Total users: <span id="total-users">1</span></p>
+                                <p>Each person pays: <span id="price-per-person">€0.00</span></p>
+                                <div class="price-calculation">
+                                    <p>Total cost breakdown:</p>
+                                    <ul id="cost-breakdown">
+                                        <li>You: €0.00 (already paid)</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-success">Add Payment & Create Individual Expenses</button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h2>Group Payments List</h2>
+                    <div class="loading" id="group-loading">
+                        <div class="spinner"></div>
+                    </div>
+                    <table id="group-payments-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Amount</th>
+                                <th>Paid</th>
+                                <th>Notes</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="group-payments-list">
+                            <!-- Payments will be listed here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="tab-content" id="individual-payments">
+                <div class="card">
+                    <h2>Add Individual Payment</h2>
+                    <form id="add-individual-payment-form">
+                        <div class="form-group">
+                            <label for="individual-for">For</label>
+                            <input type="text" id="individual-for" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="individual-amount">Amount</label>
+                            <input type="number" id="individual-amount" step="0.01" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="individual-notes">Notes</label>
+                            <textarea id="individual-notes" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="individual-paid">Paid</label>
+                            <select id="individual-paid">
+                                <option value="true">Yes</option>
+                                <option value="false" selected>No</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="individual-group">Related Group Payment</label>
+                            <select id="individual-group">
+                                <!-- Group payment options will be loaded here -->
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-success">Add Individual Payment</button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h2>Individual Payments List</h2>
+                    <div class="loading" id="individual-loading">
+                        <div class="spinner"></div>
+                    </div>
+                    <table id="individual-payments-table">
+                        <thead>
+                            <tr>
+                                <th>For</th>
+                                <th>Amount</th>
+                                <th>Paid</th>
+                                <th>Notes</th>
+                                <th>Group Payment</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="individual-payments-list">
+                            <!-- Individual payments will be listed here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="tab-content" id="summary">
+                <div class="card">
+                    <h2>Payment Summary</h2>
+                    <div class="summary-box">
+                        <p>Total Group Payments</p>
+                        <div class="summary-total" id="total-group">€0.00</div>
+                    </div>
+                    <div class="summary-box">
+                        <p>Total Individual Payments</p>
+                        <div class="summary-total" id="total-individual">€0.00</div>
+                    </div>
+                    <div class="summary-box">
+                        <p>Remaining to Pay</p>
+                        <div class="summary-total" id="remaining">€0.00</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Payment Status Per Person</h2>
+                    <table id="summary-table">
+                        <thead>
+                            <tr>
+                                <th>Person</th>
+                                <th>Total Amount</th>
+                                <th>Paid</th>
+                                <th>Remaining</th>
+                            </tr>
+                        </thead>
+                        <tbody id="summary-list">
+                            <!-- Summary data will be listed here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let apiUrl = '';
+        let apiToken = '';
+        let groupPayments = [];
+        let individualPayments = [];
+
+        // DOM elements
+        const authSection = document.getElementById('auth-section');
+        const appContent = document.getElementById('app-content');
+        const connectBtn = document.getElementById('connect-btn');
+        const apiUrlInput = document.getElementById('api-url');
+        const apiTokenInput = document.getElementById('api-token');
+        const rememberMeCheckbox = document.getElementById('remember-me');
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+        const alertsContainer = document.getElementById('alerts');
+        
+        // Forms
+        const addGroupPaymentForm = document.getElementById('add-group-payment-form');
+        const addIndividualPaymentForm = document.getElementById('add-individual-payment-form');
+        
+        // Tables and loading indicators
+        const groupPaymentsList = document.getElementById('group-payments-list');
+        const individualPaymentsList = document.getElementById('individual-payments-list');
+        const groupLoading = document.getElementById('group-loading');
+        const individualLoading = document.getElementById('individual-loading');
+        const individualGroupSelect = document.getElementById('individual-group');
+        
+        // Summary elements
+        const totalGroupEl = document.getElementById('total-group');
+        const totalIndividualEl = document.getElementById('total-individual');
+        const remainingEl = document.getElementById('remaining');
+        const summaryList = document.getElementById('summary-list');
+
+        // User list elements
+        const newUserInput = document.getElementById('new-user');
+        const addUserBtn = document.getElementById('add-user-btn');
+        const userList = document.getElementById('user-list');
+        const totalUsersEl = document.getElementById('total-users');
+        const pricePerPersonEl = document.getElementById('price-per-person');
+        const costBreakdownEl = document.getElementById('cost-breakdown');
+        const groupAmountInput = document.getElementById('group-amount');
+        
+        // Payment mode selection
+        const splitEqualRadio = document.getElementById('split-equal');
+        const perPersonRadio = document.getElementById('per-person');
+        const perPersonPriceInput = document.getElementById('per-person-price');
+        const perPersonContainer = document.getElementById('per-person-container');
+        const totalAutoCalculate = document.getElementById('total-auto-calculate');
+        
+        // List of users (You are always included by default)
+        const users = [{ name: 'You', isPaid: true, isYou: true, amount: 0 }];
+
+        // Event Listeners
+        connectBtn.addEventListener('click', connectToAPI);
+        
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabId = tab.getAttribute('data-tab');
+                activateTab(tabId);
+            });
+        });
+        
+        // Modified event listener for group payment form
+        addGroupPaymentForm.addEventListener('submit', addGroupPayment);
+        addIndividualPaymentForm.addEventListener('submit', addIndividualPayment);
+
+        // Add user button event listener
+        addUserBtn.addEventListener('click', addUser);
+        newUserInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                addUser();
+            }
+        });
+        
+        // Update price when amount changes or payment mode changes
+        groupAmountInput.addEventListener('input', calculatePricePerPerson);
+        perPersonPriceInput.addEventListener('input', updateTotalFromPerPersonPrice);
+        splitEqualRadio.addEventListener('change', onPaymentModeChange);
+        perPersonRadio.addEventListener('change', onPaymentModeChange);
+        
+        // Initial setup for payment mode UI
+        function onPaymentModeChange() {
+            const paymentMode = document.querySelector('input[name="payment-mode"]:checked').value;
+            
+            if (paymentMode === 'split-equal') {
+                // Equal split mode - show the per-person price input
+                perPersonContainer.style.display = 'flex';
+                // If the per-person price isn't set but total amount is, calculate it
+                if (!perPersonPriceInput.value && groupAmountInput.value) {
+                    const totalAmount = parseFloat(groupAmountInput.value) || 0;
+                    const pricePerPerson = totalAmount / users.length;
+                    perPersonPriceInput.value = pricePerPerson.toFixed(2);
+                    totalAutoCalculate.textContent = `Total: €${totalAmount.toFixed(2)} (${pricePerPerson.toFixed(2)} × ${users.length})`;
+                } else {
+                    updateTotalFromPerPersonPrice();
+                }
+            } else {
+                // Custom split mode - hide the per-person price input
+                perPersonContainer.style.display = 'none';
+                calculatePricePerPerson();
+            }
+            
+            renderUsers();
+        }
+        
+        // New function: update total amount from per-person price
+        function updateTotalFromPerPersonPrice() {
+            const pricePerPerson = parseFloat(perPersonPriceInput.value) || 0;
+            const totalUsers = users.length;
+            const totalAmount = pricePerPerson * totalUsers;
+            
+            // Update total amount field
+            groupAmountInput.value = totalAmount.toFixed(2);
+            
+            // Update the auto-calculate text
+            totalAutoCalculate.textContent = `Total: €${totalAmount.toFixed(2)} (${pricePerPerson.toFixed(2)} × ${totalUsers})`;
+            
+            // Also update the breakdown
+            calculatePricePerPerson();
+        }
+
+        // Cookie functions for storing and retrieving login data
+        function setCookie(name, value, days) {
+            const date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            const expires = "expires=" + date.toUTCString();
+            document.cookie = name + "=" + value + ";" + expires + ";path=/";
+        }
+
+        function getCookie(name) {
+            const cookieName = name + "=";
+            const decodedCookie = decodeURIComponent(document.cookie);
+            const cookieArray = decodedCookie.split(';');
+            
+            for (let i = 0; i < cookieArray.length; i++) {
+                let cookie = cookieArray[i];
+                while (cookie.charAt(0) === ' ') {
+                    cookie = cookie.substring(1);
+                }
+                if (cookie.indexOf(cookieName) === 0) {
+                    return cookie.substring(cookieName.length, cookie.length);
+                }
+            }
+            return "";
+        }
+
+        // Check for saved credentials on page load
+        function checkSavedCredentials() {
+            const savedUrl = getCookie("apiUrl");
+            const savedToken = getCookie("apiToken");
+            
+            if (savedUrl && savedToken) {
+                apiUrlInput.value = savedUrl;
+                apiTokenInput.value = savedToken;
+                connectToAPI();
+            }
+        }
+
+        // Connect to the API
+        function connectToAPI() {
+            apiUrl = apiUrlInput.value.trim();
+            apiToken = apiTokenInput.value.trim();
+            
+            if (!apiUrl || !apiToken) {
+                showAlert('Please enter both API URL and token.', 'danger');
+                return;
+            }
+            
+            // Test the connection
+            fetchData(`${apiUrl}/api/database/fields/table/682/`, apiToken)
+                .then(data => {
+                    if (data && Array.isArray(data)) {
+                        // Save credentials if remember me is checked
+                        if (rememberMeCheckbox.checked) {
+                            setCookie("apiUrl", apiUrl, 30);
+                            setCookie("apiToken", apiToken, 30);
+                        }
+                        
+                        authSection.classList.add('hidden');
+                        appContent.classList.remove('hidden');
+                        
+                        // Load initial data
+                        loadGroupPayments();
+                        loadIndividualPayments();
+                        
+                        showAlert('Successfully connected to the database!', 'success');
+                    } else {
+                        showAlert('Failed to connect. Please check your API URL and token.', 'danger');
+                    }
+                })
+                .catch(error => {
+                    showAlert(`Connection error: ${error.message}`, 'danger');
+                });
+        }
+
+        // Fetch data from API
+        async function fetchData(url, token, options = {}) {
+            try {
+                const defaultOptions = {
+                    headers: {
+                        'Authorization': `Token ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                };
+                
+                const fetchOptions = {...defaultOptions, ...options};
+                const response = await fetch(url, fetchOptions);
+                
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.description || response.statusText);
+                }
+                
+                return await response.json();
+            } catch (error) {
+                console.error('API Error:', error);
+                throw error;
+            }
+        }
+
+        // Load group payments data
+        function loadGroupPayments() {
+            groupLoading.style.display = 'flex';
+            
+            fetchData(`${apiUrl}/api/database/rows/table/682/?user_field_names=true`, apiToken)
+                .then(data => {
+                    groupPayments = data.results;
+                    renderGroupPayments();
+                    populateGroupPaymentsDropdown();
+                    updateSummary();
+                })
+                .catch(error => {
+                    showAlert(`Failed to load group payments: ${error.message}`, 'danger');
+                })
+                .finally(() => {
+                    groupLoading.style.display = 'none';
+                });
+        }
+
+        // Load individual payments data
+        function loadIndividualPayments() {
+            individualLoading.style.display = 'flex';
+            
+            fetchData(`${apiUrl}/api/database/rows/table/684/?user_field_names=true`, apiToken)
+                .then(data => {
+                    individualPayments = data.results;
+                    renderIndividualPayments();
+                    updateSummary();
+                })
+                .catch(error => {
+                    showAlert(`Failed to load individual payments: ${error.message}`, 'danger');
+                })
+                .finally(() => {
+                    individualLoading.style.display = 'none';
+                });
+        }
+
+        // Render group payments table
+        function renderGroupPayments() {
+            groupPaymentsList.innerHTML = '';
+            
+            if (groupPayments.length === 0) {
+                const row = document.createElement('tr');
+                row.innerHTML = '<td colspan="5" style="text-align: center;">No group payments found</td>';
+                groupPaymentsList.appendChild(row);
+                return;
+            }
+            
+            groupPayments.forEach(payment => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${payment.Name || '-'}</td>
+                    <td>€${parseFloat(payment.Money).toFixed(2)}</td>
+                    <td>${payment['Paid overall'] ? '✅' : '❌'}</td>
+                    <td>${payment.Notes || '-'}</td>
+                    <td class="actions">
+                        <button class="btn btn-sm btn-danger" onclick="deleteGroupPayment(${payment.id})">Delete</button>
+                        <button class="btn btn-sm" onclick="toggleGroupPaid(${payment.id}, ${!payment['Paid overall']})">
+                            ${payment['Paid overall'] ? 'Mark Unpaid' : 'Mark Paid'}
+                        </button>
+                    </td>
+                `;
+                groupPaymentsList.appendChild(row);
+            });
+        }
+
+        // Render individual payments table
+        function renderIndividualPayments() {
+            individualPaymentsList.innerHTML = '';
+            
+            if (individualPayments.length === 0) {
+                const row = document.createElement('tr');
+                row.innerHTML = '<td colspan="6" style="text-align: center;">No individual payments found</td>';
+                individualPaymentsList.appendChild(row);
+                return;
+            }
+            
+            individualPayments.forEach(payment => {
+                const groupPayment = payment['Group payments'] && payment['Group payments'].length > 0 
+                    ? payment['Group payments'][0].value : '-';
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${payment.For || '-'}</td>
+                    <td>€${parseFloat(payment.Money).toFixed(2)}</td>
+                    <td>${payment.Paid ? '✅' : '❌'}</td>
+                    <td>${payment.Notes || '-'}</td>
+                    <td>${groupPayment}</td>
+                    <td class="actions">
+                        <button class="btn btn-sm btn-danger" onclick="deleteIndividualPayment(${payment.id})">Delete</button>
+                        <button class="btn btn-sm" onclick="toggleIndividualPaid(${payment.id}, ${!payment.Paid})">
+                            ${payment.Paid ? 'Mark Unpaid' : 'Mark Paid'}
+                        </button>
+                    </td>
+                `;
+                individualPaymentsList.appendChild(row);
+            });
+        }
+
+        // Populate group payments dropdown
+        function populateGroupPaymentsDropdown() {
+            individualGroupSelect.innerHTML = '<option value="">None</option>';
+            
+            groupPayments.forEach(payment => {
+                const option = document.createElement('option');
+                option.value = payment.id;
+                option.textContent = payment.Name;
+                individualGroupSelect.appendChild(option);
+            });
+        }
+
+        // Add a new user
+        function addUser() {
+            const userName = newUserInput.value.trim();
+            
+            if (userName && !users.some(user => user.name.toLowerCase() === userName.toLowerCase())) {
+                users.push({ name: userName, isPaid: false, isYou: false, amount: 0 });
+                newUserInput.value = '';
+                renderUsers();
+                calculatePricePerPerson();
+            } else if (!userName) {
+                showAlert('Please enter a name', 'danger');
+            } else {
+                showAlert('This person is already in the list', 'danger');
+            }
+        }
+        
+        // Remove a user
+        function removeUser(index) {
+            if (!users[index].isYou) {  // Prevent removing yourself
+                users.splice(index, 1);
+                renderUsers();
+                calculatePricePerPerson();
+            }
+        }
+        
+        // Toggle paid status
+        function togglePaid(index) {
+            if (!users[index].isYou) {  // Your payment status is fixed
+                users[index].isPaid = !users[index].isPaid;
+                renderUsers();
+                calculatePricePerPerson();
+            }
+        }
+        
+        // Update user amount (for per-person payment mode)
+        function updateUserAmount(index, amount) {
+            if (!users[index].isYou) {
+                users[index].amount = parseFloat(amount) || 0;
+                calculatePricePerPerson();
+            }
+        }
+        
+        // Render the user list
+        function renderUsers() {
+            userList.innerHTML = '';
+            const paymentMode = document.querySelector('input[name="payment-mode"]:checked').value;
+            
+            users.forEach((user, index) => {
+                const userItem = document.createElement('div');
+                userItem.className = 'user-item';
+                
+                let userHtml = `
+                    <span>${user.name}${user.isYou ? ' (already paid)' : ''}</span>
+                    <div class="user-toggle">
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="is-paid-${index}" 
+                                ${user.isPaid ? 'checked' : ''} 
+                                ${user.isYou ? 'disabled' : ''}>
+                            <label for="is-paid-${index}">Paid</label>
+                        </div>`;
+                
+                // Add amount input field for per-person payment mode
+                if (paymentMode === 'per-person' && !user.isYou) {
+                    userHtml += `
+                        <div class="amount-container" style="margin-left: 10px;">
+                            <input type="number" id="amount-${index}" placeholder="Amount" 
+                                min="0" step="0.01" value="${user.amount}" 
+                                style="width: 100px; padding: 5px;">
+                        </div>`;
+                }
+                
+                userHtml += `
+                    </div>
+                    <button type="button" class="btn-remove" ${user.isYou ? 'disabled' : ''}>✕</button>
+                `;
+                
+                userItem.innerHTML = userHtml;
+                userList.appendChild(userItem);
+                
+                // Add event listeners
+                if (!user.isYou) {
+                    const checkbox = userItem.querySelector(`#is-paid-${index}`);
+                    const removeBtn = userItem.querySelector('.btn-remove');
+                    
+                    checkbox.addEventListener('change', () => togglePaid(index));
+                    removeBtn.addEventListener('click', () => removeUser(index));
+                    
+                    // Add event listener for amount input if in per-person mode
+                    if (paymentMode === 'per-person') {
+                        const amountInput = userItem.querySelector(`#amount-${index}`);
+                        amountInput.addEventListener('input', (e) => updateUserAmount(index, e.target.value));
+                    }
+                }
+            });
+            
+            totalUsersEl.textContent = users.length;
+        }
+        
+        // Calculate the price per person
+        function calculatePricePerPerson() {
+            const totalAmount = parseFloat(groupAmountInput.value) || 0;
+            const paymentMode = document.querySelector('input[name="payment-mode"]:checked').value;
+            
+            // Re-render users when payment mode changes to update the UI
+            renderUsers();
+            
+            if (totalAmount > 0) {
+                if (paymentMode === 'split-equal') {
+                    // Split equally mode - calculate from per-person price input
+                    const totalUsers = users.length;
+                    const pricePerPerson = parseFloat(perPersonPriceInput.value) || (totalAmount / totalUsers);
+                    
+                    // Update the per person price input if it's empty or doesn't match the calculation
+                    if (perPersonPriceInput.value === '' || Math.abs(pricePerPerson * totalUsers - totalAmount) > 0.01) {
+                        perPersonPriceInput.value = (totalAmount / totalUsers).toFixed(2);
+                        totalAutoCalculate.textContent = `Total: €${totalAmount.toFixed(2)} (${perPersonPriceInput.value} × ${totalUsers})`;
+                    }
+                    
+                    pricePerPersonEl.textContent = `€${pricePerPerson.toFixed(2)}`;
+                    
+                    // Update cost breakdown
+                    costBreakdownEl.innerHTML = '';
+                    users.forEach(user => {
+                        const li = document.createElement('li');
+                        if (user.isYou) {
+                            li.textContent = `${user.name}: €${pricePerPerson.toFixed(2)} (already paid)`;
+                        } else if (user.isPaid) {
+                            li.textContent = `${user.name}: €${pricePerPerson.toFixed(2)} (paid)`;
+                        } else {
+                            li.textContent = `${user.name}: €${pricePerPerson.toFixed(2)} (unpaid)`;
+                        }
+                        costBreakdownEl.appendChild(li);
+                    });
+                } else {
+                    // Custom per-person mode
+                    pricePerPersonEl.textContent = `Varies (set individually)`;
+                    
+                    // Calculate total assigned amount
+                    let assignedTotal = 0;
+                    users.forEach(user => {
+                        if (!user.isYou) {
+                            assignedTotal += user.amount;
+                        }
+                    });
+                    
+                    // Your amount is what's left
+                    const yourAmount = Math.max(0, totalAmount - assignedTotal);
+                    users[0].amount = yourAmount;
+                    
+                    // Update cost breakdown
+                    costBreakdownEl.innerHTML = '';
+                    users.forEach(user => {
+                        const li = document.createElement('li');
+                        if (user.isYou) {
+                            li.textContent = `${user.name}: €${yourAmount.toFixed(2)} (already paid)`;
+                        } else if (user.isPaid) {
+                            li.textContent = `${user.name}: €${user.amount.toFixed(2)} (paid)`;
+                        } else {
+                            li.textContent = `${user.name}: €${user.amount.toFixed(2)} (unpaid)`;
+                        }
+                        costBreakdownEl.appendChild(li);
+                    });
+                }
+            } else {
+                pricePerPersonEl.textContent = '€0.00';
+                costBreakdownEl.innerHTML = '<li>You: €0.00 (already paid)</li>';
+            }
+        }
+
+        // Add new group payment with individual expenses
+        function addGroupPayment(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('group-name').value;
+            const amount = document.getElementById('group-amount').value;
+            const notes = document.getElementById('group-notes').value;
+            const paid = document.getElementById('group-paid').value === 'true';
+            const paymentMode = document.querySelector('input[name="payment-mode"]:checked').value;
+            
+            if (users.length <= 1) {
+                showAlert('Please add at least one more person to split with', 'warning');
+                return;
+            }
+            
+            const paymentData = {
+                "Name": name,
+                "Money": amount,
+                "Notes": notes,
+                "Paid overall": paid
+            };
+            
+            // First create the group payment
+            fetchData(
+                `${apiUrl}/api/database/rows/table/682/?user_field_names=true`,
+                apiToken,
+                {
+                    method: 'POST',
+                    body: JSON.stringify(paymentData)
+                }
+            )
+            .then((response) => {
+                showAlert('Group payment added successfully!', 'success');
+                
+                // Get the new group payment ID
+                const newGroupPaymentId = response.id;
+                
+                // Create individual payments for each non-you user
+                let individualPromises = [];
+                
+                if (paymentMode === 'split-equal') {
+                    // Split equally using the per person price
+                    const pricePerPerson = parseFloat(perPersonPriceInput.value);
+                    
+                    individualPromises = users
+                        .filter(user => !user.isYou) // Skip "You" since you already paid
+                        .map(user => {
+                            const individualData = {
+                                "For": user.name,
+                                "Money": pricePerPerson.toFixed(2),
+                                "Notes": `Share of ${name}`,
+                                "Paid": user.isPaid,
+                                "Group payments": [newGroupPaymentId]
+                            };
+                            
+                            return fetchData(
+                                `${apiUrl}/api/database/rows/table/684/?user_field_names=true`,
+                                apiToken,
+                                {
+                                    method: 'POST',
+                                    body: JSON.stringify(individualData)
+                                }
+                            );
+                        });
+                } else {
+                    // Custom per-person payment
+                    individualPromises = users
+                        .filter(user => !user.isYou && user.amount > 0) // Skip "You" and users with 0 amount
+                        .map(user => {
+                            const individualData = {
+                                "For": user.name,
+                                "Money": user.amount.toFixed(2),
+                                "Notes": `Share of ${name}`,
+                                "Paid": user.isPaid,
+                                "Group payments": [newGroupPaymentId]
+                            };
+                            
+                            return fetchData(
+                                `${apiUrl}/api/database/rows/table/684/?user_field_names=true`,
+                                apiToken,
+                                {
+                                    method: 'POST',
+                                    body: JSON.stringify(individualData)
+                                }
+                            );
+                        });
+                }
+                
+                // Wait for all individual payments to be created
+                return Promise.all(individualPromises);
+            })
+            .then(() => {
+                showAlert('All individual payments created!', 'success');
+                addGroupPaymentForm.reset();
+                
+                // Reset users to just "You"
+                users.length = 1;
+                users[0].amount = 0;
+                renderUsers();
+                calculatePricePerPerson();
+                
+                // Set payment mode back to split-equal
+                splitEqualRadio.checked = true;
+                perPersonContainer.style.display = 'flex';
+                perPersonPriceInput.value = '';
+                totalAutoCalculate.textContent = '';
+                
+                // Reload data
+                loadGroupPayments();
+                loadIndividualPayments();
+            })
+            .catch(error => {
+                showAlert(`Failed to add payments: ${error.message}`, 'danger');
+            });
+        }
+
+        // Add new individual payment (original function)
+        function addIndividualPayment(e) {
+            e.preventDefault();
+            
+            const forPerson = document.getElementById('individual-for').value;
+            const amount = document.getElementById('individual-amount').value;
+            const notes = document.getElementById('individual-notes').value;
+            const paid = document.getElementById('individual-paid').value === 'true';
+            const groupId = document.getElementById('individual-group').value;
+            
+            const paymentData = {
+                "For": forPerson,
+                "Money": amount,
+                "Notes": notes,
+                "Paid": paid,
+                "Group payments": groupId ? [parseInt(groupId)] : []
+            };
+            
+            fetchData(
+                `${apiUrl}/api/database/rows/table/684/?user_field_names=true`,
+                apiToken,
+                {
+                    method: 'POST',
+                    body: JSON.stringify(paymentData)
+                }
+            )
+            .then(() => {
+                showAlert('Individual payment added successfully!', 'success');
+                addIndividualPaymentForm.reset();
+                loadIndividualPayments();
+            })
+            .catch(error => {
+                showAlert(`Failed to add individual payment: ${error.message}`, 'danger');
+            });
+        }
+
+        // Delete a group payment
+        function deleteGroupPayment(id) {
+            if (confirm('Are you sure you want to delete this group payment?')) {
+                fetchData(
+                    `${apiUrl}/api/database/rows/table/682/${id}/`,
+                    apiToken,
+                    {
+                        method: 'DELETE'
+                    }
+                )
+                .then(() => {
+                    showAlert('Group payment deleted successfully!', 'success');
+                    loadGroupPayments();
+                    loadIndividualPayments(); // Reload individual payments as they might be linked
+                })
+                .catch(error => {
+                    showAlert(`Failed to delete group payment: ${error.message}`, 'danger');
+                });
+            }
+        }
+
+        // Delete an individual payment
+        function deleteIndividualPayment(id) {
+            if (confirm('Are you sure you want to delete this individual payment?')) {
+                fetchData(
+                    `${apiUrl}/api/database/rows/table/684/${id}/`,
+                    apiToken,
+                    {
+                        method: 'DELETE'
+                    }
+                )
+                .then(() => {
+                    showAlert('Individual payment deleted successfully!', 'success');
+                    loadIndividualPayments();
+                })
+                .catch(error => {
+                    showAlert(`Failed to delete individual payment: ${error.message}`, 'danger');
+                });
+            }
+        }
+
+        // Toggle group payment paid status
+        function toggleGroupPaid(id, status) {
+            fetchData(
+                `${apiUrl}/api/database/rows/table/682/${id}/?user_field_names=true`,
+                apiToken,
+                {
+                    method: 'PATCH',
+                    body: JSON.stringify({"Paid overall": status})
+                }
+            )
+            .then(() => {
+                showAlert(`Group payment marked as ${status ? 'paid' : 'unpaid'}!`, 'success');
+                loadGroupPayments();
+            })
+            .catch(error => {
+                showAlert(`Failed to update payment status: ${error.message}`, 'danger');
+            });
+        }
+
+        // Toggle individual payment paid status
+        function toggleIndividualPaid(id, status) {
+            fetchData(
+                `${apiUrl}/api/database/rows/table/684/${id}/?user_field_names=true`,
+                apiToken,
+                {
+                    method: 'PATCH',
+                    body: JSON.stringify({"Paid": status})
+                }
+            )
+            .then(() => {
+                showAlert(`Individual payment marked as ${status ? 'paid' : 'unpaid'}!`, 'success');
+                loadIndividualPayments();
+            })
+            .catch(error => {
+                showAlert(`Failed to update payment status: ${error.message}`, 'danger');
+            });
+        }
+
+        // Update summary data
+        function updateSummary() {
+            // Calculate totals
+            let totalGroup = 0;
+            let totalIndividual = 0;
+            
+            groupPayments.forEach(payment => {
+                totalGroup += parseFloat(payment.Money);
+            });
+            
+            individualPayments.forEach(payment => {
+                totalIndividual += parseFloat(payment.Money);
+            });
+            
+            // Update summary elements
+            totalGroupEl.textContent = `€${totalGroup.toFixed(2)}`;
+            totalIndividualEl.textContent = `€${totalIndividual.toFixed(2)}`;
+            remainingEl.textContent = `€${(totalGroup - totalIndividual).toFixed(2)}`;
+            
+            // Generate summary per person
+            const personSummary = {};
+            
+            individualPayments.forEach(payment => {
+                const person = payment.For;
+                if (!personSummary[person]) {
+                    personSummary[person] = {
+                        total: 0,
+                        paid: 0
+                    };
+                }
+                
+                const amount = parseFloat(payment.Money);
+                personSummary[person].total += amount;
+                
+                if (payment.Paid) {
+                    personSummary[person].paid += amount;
+                }
+            });
+            
+            // Render person summary
+            summaryList.innerHTML = '';
+            
+            if (Object.keys(personSummary).length === 0) {
+                const row = document.createElement('tr');
+                row.innerHTML = '<td colspan="4" style="text-align: center;">No data available</td>';
+                summaryList.appendChild(row);
+                return;
+            }
+            
+            Object.keys(personSummary).forEach(person => {
+                const summary = personSummary[person];
+                const row = document.createElement('tr');
+                const remaining = summary.total - summary.paid;
+                
+                row.innerHTML = `
+                    <td>${person}</td>
+                    <td>€${summary.total.toFixed(2)}</td>
+                    <td>€${summary.paid.toFixed(2)}</td>
+                    <td>€${remaining.toFixed(2)}</td>
+                `;
+                
+                summaryList.appendChild(row);
+            });
+        }
+
+        // Show alert message
+        function showAlert(message, type) {
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.textContent = message;
+            
+            alertsContainer.appendChild(alert);
+            
+            setTimeout(() => {
+                alert.remove();
+            }, 5000);
+        }
+
+        // Activate tab
+        function activateTab(tabId) {
+            tabs.forEach(tab => {
+                if (tab.getAttribute('data-tab') === tabId) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+            
+            tabContents.forEach(content => {
+                if (content.id === tabId) {
+                    content.classList.add('active');
+                } else {
+                    content.classList.remove('active');
+                }
+            });
+            
+            // Refresh data when switching to summary tab
+            if (tabId === 'summary') {
+                updateSummary();
+            }
+        }
+
+        // Initialize the UI
+        function init() {
+            // Initialize the user list
+            renderUsers();
+            
+            // Initial payment mode setup
+            onPaymentModeChange();
+            
+            // Check for saved credentials
+            checkSavedCredentials();
+        }
+
+        // Run initialization
+        init();
+    </script>
+</body>
+</html>
