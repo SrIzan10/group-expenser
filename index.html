@@ -1,32 +1,61 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Group Payment Tracker</title>
     <style>
         :root {
-            --primary: #4a6da7;
-            --primary-dark: #345384;
-            --secondary: #57ba98;
-            --light: #f8f9fa;
-            --dark: #2c3e50;
-            --danger: #e74c3c;
-            --success: #2ecc71;
-            --warning: #f39c12;
-            --info: #3498db;
+            /* Light theme variables */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --bg-tertiary: #edf2f7;
+            --color-primary: #4a6da7;
+            --color-primary-dark: #345384;
+            --color-secondary: #57ba98;
+            --color-text: #2d3748;
+            --color-text-light: #4a5568;
+            --color-border: #e2e8f0;
+            --color-danger: #e53e3e;
+            --color-success: #38a169;
+            --color-warning: #ecc94b;
+            --color-info: #3182ce;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
+        [data-theme="dark"] {
+            /* Dark theme variables */
+            --bg-primary: #1a202c;
+            --bg-secondary: #2d3748;
+            --bg-tertiary: #283141;
+            --color-primary: #5a88c7;
+            --color-primary-dark: #4a6da7;
+            --color-secondary: #4fb08b;
+            --color-text: #e2e8f0;
+            --color-text-light: #a0aec0;
+            --color-border: #4a5568;
+            --color-danger: #f56565;
+            --color-success: #48bb78;
+            --color-warning: #f6ad55;
+            --color-info: #63b3ed;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.25);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.16);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.15);
         }
         
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
         }
         
         body {
-            background-color: #f5f7fa;
-            color: var(--dark);
+            background-color: var(--bg-secondary);
+            color: var(--color-text);
             line-height: 1.6;
         }
         
@@ -37,111 +66,168 @@
         }
         
         header {
-            background-color: var(--primary);
+            background-color: var(--color-primary);
             color: white;
             padding: 20px 0;
             margin-bottom: 30px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: var(--shadow-md);
+            position: relative;
+        }
+        
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         
         header h1 {
             margin: 0;
-            text-align: center;
             font-weight: 600;
+            font-size: 1.75rem;
+        }
+        
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 8px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s;
+        }
+        
+        .theme-toggle:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .theme-toggle svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
         }
         
         .auth-section {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            background-color: var(--bg-primary);
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
             margin-bottom: 30px;
         }
         
         .card {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
+            background-color: var(--bg-primary);
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 24px;
         }
         
         h2 {
-            color: var(--primary);
-            margin-bottom: 15px;
-            border-bottom: 2px solid var(--secondary);
-            padding-bottom: 10px;
+            color: var(--color-primary);
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--color-secondary);
+            padding-bottom: 12px;
             font-weight: 600;
+            font-size: 1.5rem;
         }
         
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
         
         label {
             display: block;
             margin-bottom: 8px;
             font-weight: 500;
+            color: var(--color-text);
         }
         
         input, select, textarea {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            padding: 12px;
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
             font-size: 16px;
+            background-color: var(--bg-primary);
+            color: var(--color-text);
+            transition: border-color 0.2s ease;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(74, 109, 167, 0.1);
         }
         
         .btn {
             display: inline-block;
-            padding: 10px 20px;
+            padding: 12px 24px;
             border: none;
-            border-radius: 4px;
-            background-color: var(--primary);
+            border-radius: 8px;
+            background-color: var(--color-primary);
             color: white;
             cursor: pointer;
             font-size: 16px;
             font-weight: 500;
-            transition: background-color 0.2s;
+            transition: background-color 0.2s, transform 0.1s;
         }
         
         .btn:hover {
-            background-color: var(--primary-dark);
+            background-color: var(--color-primary-dark);
+        }
+        
+        .btn:active {
+            transform: translateY(1px);
         }
         
         .btn-success {
-            background-color: var(--success);
+            background-color: var(--color-success);
         }
         
         .btn-success:hover {
-            background-color: #27ae60;
+            background-color: #2f9e5f;
         }
         
         .btn-danger {
-            background-color: var(--danger);
+            background-color: var(--color-danger);
         }
         
         .btn-danger:hover {
-            background-color: #c0392b;
+            background-color: #c53030;
         }
         
         .tabs {
             display: flex;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            background-color: var(--bg-tertiary);
         }
         
         .tab {
-            padding: 10px 20px;
+            padding: 14px 20px;
             cursor: pointer;
-            background-color: #ddd;
-            border-radius: 4px 4px 0 0;
-            margin-right: 5px;
+            background-color: var(--bg-tertiary);
+            color: var(--color-text-light);
+            flex-grow: 1;
+            text-align: center;
+            transition: all 0.2s ease;
         }
         
         .tab.active {
-            background-color: white;
-            border-bottom: 3px solid var(--secondary);
+            background-color: var(--bg-primary);
+            color: var(--color-primary);
             font-weight: 600;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .tab:hover:not(.active) {
+            background-color: var(--bg-secondary);
         }
         
         .tab-content {
@@ -154,26 +240,47 @@
         
         table {
             width: 100%;
-            border-collapse: collapse;
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
         }
         
         table th, table td {
-            padding: 12px 15px;
+            padding: 14px 16px;
             text-align: left;
-            border-bottom: 1px solid #ddd;
+            border-bottom: 1px solid var(--color-border);
         }
         
         table th {
-            background-color: var(--primary);
+            background-color: var(--color-primary);
             color: white;
+            font-weight: 500;
         }
         
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
+        table th:first-child {
+            border-top-left-radius: 8px;
         }
         
-        tr:hover {
-            background-color: #e9ecef;
+        table th:last-child {
+            border-top-right-radius: 8px;
+        }
+        
+        table tbody tr {
+            background-color: var(--bg-primary);
+        }
+        
+        table tbody tr:last-child td {
+            border-bottom: none;
+        }
+        
+        table tbody tr:nth-child(even) {
+            background-color: var(--bg-tertiary);
+        }
+        
+        table tbody tr:hover {
+            background-color: var(--bg-secondary);
         }
         
         .actions {
@@ -182,41 +289,43 @@
         }
         
         .btn-sm {
-            padding: 5px 10px;
+            padding: 8px 12px;
             font-size: 14px;
+            border-radius: 6px;
         }
         
         .summary-box {
-            background-color: var(--light);
-            border-left: 5px solid var(--info);
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 4px;
+            background-color: var(--bg-tertiary);
+            border-left: 5px solid var(--color-info);
+            padding: 20px;
+            margin-bottom: 24px;
+            border-radius: 8px;
         }
         
         .summary-total {
-            font-size: 24px;
+            font-size: 28px;
             font-weight: 600;
-            color: var(--primary);
+            color: var(--color-primary);
             margin-top: 10px;
         }
         
         .alert {
-            padding: 15px;
-            border-radius: 4px;
+            padding: 16px;
+            border-radius: 8px;
             margin-bottom: 20px;
+            font-weight: 500;
         }
         
         .alert-success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
+            background-color: rgba(56, 161, 105, 0.1);
+            color: var(--color-success);
+            border: 1px solid rgba(56, 161, 105, 0.2);
         }
         
         .alert-danger {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
+            background-color: rgba(229, 62, 62, 0.1);
+            color: var(--color-danger);
+            border: 1px solid rgba(229, 62, 62, 0.2);
         }
         
         .hidden {
@@ -234,7 +343,7 @@
             width: 36px;
             height: 36px;
             border-radius: 50%;
-            border-left: 4px solid var(--primary);
+            border-left: 4px solid var(--color-primary);
             animation: spin 1s linear infinite;
         }
         
@@ -243,18 +352,24 @@
             100% { transform: rotate(360deg); }
         }
         
-        /* New styles for the user list */
+        /* Dark mode spinner adjustment */
+        [data-theme="dark"] .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-left: 4px solid var(--color-primary);
+        }
+        
+        /* User list styles */
         .user-list {
-            margin-top: 15px;
+            margin-top: 20px;
         }
         
         .user-item {
             display: flex;
             align-items: center;
-            margin-bottom: 10px;
-            background-color: var(--light);
-            padding: 8px 12px;
-            border-radius: 4px;
+            margin-bottom: 12px;
+            background-color: var(--bg-tertiary);
+            padding: 12px 16px;
+            border-radius: 8px;
         }
         
         .user-item span {
@@ -262,18 +377,18 @@
         }
         
         .user-item .btn-remove {
-            background-color: var(--danger);
+            background-color: var(--color-danger);
             color: white;
             border: none;
-            border-radius: 4px;
-            padding: 3px 8px;
+            border-radius: 6px;
+            padding: 6px 10px;
             cursor: pointer;
         }
         
         .user-add {
             display: flex;
-            margin-bottom: 15px;
-            gap: 10px;
+            margin-bottom: 20px;
+            gap: 12px;
         }
         
         .user-add input {
@@ -281,20 +396,25 @@
         }
         
         .user-add button {
-            background-color: var(--secondary);
+            background-color: var(--color-secondary);
             color: white;
             border: none;
-            border-radius: 4px;
-            padding: 8px 15px;
+            border-radius: 8px;
+            padding: 12px 16px;
             cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .user-add button:hover {
+            background-color: #3da682;
         }
         
         .price-per-person {
-            background-color: #e9f7ef;
-            border-left: 4px solid var(--success);
-            padding: 10px;
-            margin-top: 15px;
-            border-radius: 4px;
+            background-color: rgba(56, 161, 105, 0.1);
+            border-left: 4px solid var(--color-success);
+            padding: 16px;
+            margin-top: 20px;
+            border-radius: 8px;
         }
         
         .price-per-person p {
@@ -304,7 +424,8 @@
         .price-calculation {
             font-size: 18px;
             font-weight: 600;
-            margin-top: 10px;
+            margin-top: 12px;
+            color: var(--color-text);
         }
 
         .user-toggle {
@@ -321,30 +442,15 @@
         
         .checkbox-container input[type="checkbox"] {
             width: auto;
-            margin-right: 5px;
+            margin-right: 8px;
         }
         
-        @media (max-width: 768px) {
-            .tabs {
-                flex-direction: column;
-            }
-            
-            .tab {
-                margin-bottom: 5px;
-                border-radius: 4px;
-            }
-            
-            .actions {
-                flex-direction: column;
-            }
-        }
-
         /* Payment mode toggle style */
         .payment-mode {
-            margin-bottom: 15px;
-            background-color: var(--light);
-            padding: 10px;
-            border-radius: 4px;
+            margin-bottom: 20px;
+            background-color: var(--bg-tertiary);
+            padding: 16px;
+            border-radius: 8px;
         }
         
         .payment-mode label {
@@ -355,17 +461,17 @@
         
         .payment-mode input[type="radio"] {
             width: auto;
-            margin-right: 5px;
+            margin-right: 8px;
         }
         
-        /* New style for per-person input */
+        /* Per-person input style */
         .price-input-container {
             display: flex;
             align-items: center;
-            margin-top: 10px;
-            background-color: #f2f8ff;
-            padding: 10px;
-            border-radius: 4px;
+            margin-top: 12px;
+            background-color: rgba(49, 130, 206, 0.1);
+            padding: 16px;
+            border-radius: 8px;
         }
         
         .price-input-container label {
@@ -381,7 +487,57 @@
         .auto-calculate {
             margin-left: 15px;
             font-style: italic;
-            color: var(--info);
+            color: var(--color-info);
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .tab {
+                border-radius: 0;
+            }
+            
+            .tab:first-child {
+                border-top-left-radius: 8px;
+                border-top-right-radius: 8px;
+            }
+            
+            .tab:last-child {
+                border-bottom-left-radius: 8px;
+                border-bottom-right-radius: 8px;
+            }
+            
+            .actions {
+                flex-direction: column;
+            }
+            
+            header .container {
+                flex-direction: column;
+                gap: 12px;
+            }
+            
+            .theme-toggle {
+                position: absolute;
+                top: 20px;
+                right: 20px;
+            }
+            
+            .price-input-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .price-input-container label {
+                margin-bottom: 8px;
+            }
+            
+            .auto-calculate {
+                margin-left: 0;
+                margin-top: 8px;
+            }
         }
     </style>
 </head>
@@ -389,6 +545,14 @@
     <header>
         <div class="container">
             <h1>Group Payment Tracker</h1>
+            <button id="theme-toggle" class="theme-toggle" title="Toggle light/dark mode">
+                <svg id="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-1.5v-17a8.5 8.5 0 0 0 0 17z"/>
+                </svg>
+                <svg id="sun-icon" class="hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M12 18a6 6 0 1 1 0-12 6 6 0 0 1 0 12zm0-2a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM11 1h2v3h-2V1zm0 19h2v3h-2v-3zM3.515 4.929l1.414-1.414L7.05 5.636 5.636 7.05 3.515 4.93zM16.95 18.364l1.414-1.414 2.121 2.121-1.414 1.414-2.121-2.121zm2.121-14.85l1.414 1.415-2.121 2.121-1.414-1.414 2.121-2.121zM5.636 16.95l1.414 1.414-2.121 2.121-1.414-1.414 2.121-2.121zM23 11v2h-3v-2h3zM4 11v2H1v-2h3z"/>
+                </svg>
+            </button>
         </div>
     </header>
 
@@ -492,7 +656,7 @@
                                 <div class="price-calculation">
                                     <p>Total cost breakdown:</p>
                                     <ul id="cost-breakdown">
-                                        <li>You: €0.00 (already paid)</li>
+                                        <li>You: €0.00</li>
                                     </ul>
                                 </div>
                             </div>
@@ -634,6 +798,9 @@
         const tabs = document.querySelectorAll('.tab');
         const tabContents = document.querySelectorAll('.tab-content');
         const alertsContainer = document.getElementById('alerts');
+        const themeToggle = document.getElementById('theme-toggle');
+        const moonIcon = document.getElementById('moon-icon');
+        const sunIcon = document.getElementById('sun-icon');
         
         // Forms
         const addGroupPaymentForm = document.getElementById('add-group-payment-form');
@@ -671,6 +838,45 @@
         // List of users (You are always included by default)
         const users = [{ name: 'You', isPaid: true, isYou: true, amount: 0 }];
 
+        // Theme handling
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            // Update theme toggle icons
+            if (newTheme === 'dark') {
+                moonIcon.classList.add('hidden');
+                sunIcon.classList.remove('hidden');
+            } else {
+                moonIcon.classList.remove('hidden');
+                sunIcon.classList.add('hidden');
+            }
+        }
+        
+        // Set initial theme based on preference
+        function setInitialTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const theme = savedTheme || (prefersDark ? 'dark' : 'light');
+            
+            document.documentElement.setAttribute('data-theme', theme);
+            
+            // Set correct icon
+            if (theme === 'dark') {
+                moonIcon.classList.add('hidden');
+                sunIcon.classList.remove('hidden');
+            } else {
+                moonIcon.classList.remove('hidden');
+                sunIcon.classList.add('hidden');
+            }
+        }
+        
+        // Add theme toggle event listener
+        themeToggle.addEventListener('click', toggleTheme);
+        
         // Event Listeners
         connectBtn.addEventListener('click', connectToAPI);
         
@@ -681,11 +887,9 @@
             });
         });
         
-        // Modified event listener for group payment form
         addGroupPaymentForm.addEventListener('submit', addGroupPayment);
         addIndividualPaymentForm.addEventListener('submit', addIndividualPayment);
 
-        // Add user button event listener
         addUserBtn.addEventListener('click', addUser);
         newUserInput.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
@@ -694,20 +898,16 @@
             }
         });
         
-        // Update price when amount changes or payment mode changes
         groupAmountInput.addEventListener('input', calculatePricePerPerson);
         perPersonPriceInput.addEventListener('input', updateTotalFromPerPersonPrice);
         splitEqualRadio.addEventListener('change', onPaymentModeChange);
         perPersonRadio.addEventListener('change', onPaymentModeChange);
         
-        // Initial setup for payment mode UI
         function onPaymentModeChange() {
             const paymentMode = document.querySelector('input[name="payment-mode"]:checked').value;
             
             if (paymentMode === 'split-equal') {
-                // Equal split mode - show the per-person price input
                 perPersonContainer.style.display = 'flex';
-                // If the per-person price isn't set but total amount is, calculate it
                 if (!perPersonPriceInput.value && groupAmountInput.value) {
                     const totalAmount = parseFloat(groupAmountInput.value) || 0;
                     const pricePerPerson = totalAmount / users.length;
@@ -717,7 +917,6 @@
                     updateTotalFromPerPersonPrice();
                 }
             } else {
-                // Custom split mode - hide the per-person price input
                 perPersonContainer.style.display = 'none';
                 calculatePricePerPerson();
             }
@@ -725,23 +924,16 @@
             renderUsers();
         }
         
-        // New function: update total amount from per-person price
         function updateTotalFromPerPersonPrice() {
             const pricePerPerson = parseFloat(perPersonPriceInput.value) || 0;
             const totalUsers = users.length;
             const totalAmount = pricePerPerson * totalUsers;
             
-            // Update total amount field
             groupAmountInput.value = totalAmount.toFixed(2);
-            
-            // Update the auto-calculate text
             totalAutoCalculate.textContent = `Total: €${totalAmount.toFixed(2)} (${pricePerPerson.toFixed(2)} × ${totalUsers})`;
-            
-            // Also update the breakdown
             calculatePricePerPerson();
         }
 
-        // Cookie functions for storing and retrieving login data
         function setCookie(name, value, days) {
             const date = new Date();
             date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
@@ -766,7 +958,6 @@
             return "";
         }
 
-        // Check for saved credentials on page load
         function checkSavedCredentials() {
             const savedUrl = getCookie("apiUrl");
             const savedToken = getCookie("apiToken");
@@ -778,7 +969,6 @@
             }
         }
 
-        // Connect to the API
         function connectToAPI() {
             apiUrl = apiUrlInput.value.trim();
             apiToken = apiTokenInput.value.trim();
@@ -788,11 +978,9 @@
                 return;
             }
             
-            // Test the connection
             fetchData(`${apiUrl}/api/database/fields/table/682/`, apiToken)
                 .then(data => {
                     if (data && Array.isArray(data)) {
-                        // Save credentials if remember me is checked
                         if (rememberMeCheckbox.checked) {
                             setCookie("apiUrl", apiUrl, 30);
                             setCookie("apiToken", apiToken, 30);
@@ -801,11 +989,8 @@
                         authSection.classList.add('hidden');
                         appContent.classList.remove('hidden');
                         
-                        // Load initial data
                         loadGroupPayments();
                         loadIndividualPayments();
-                        
-                        showAlert('Successfully connected to the database!', 'success');
                     } else {
                         showAlert('Failed to connect. Please check your API URL and token.', 'danger');
                     }
@@ -815,7 +1000,6 @@
                 });
         }
 
-        // Fetch data from API
         async function fetchData(url, token, options = {}) {
             try {
                 const defaultOptions = {
@@ -840,7 +1024,6 @@
             }
         }
 
-        // Load group payments data
         function loadGroupPayments() {
             groupLoading.style.display = 'flex';
             
@@ -859,7 +1042,6 @@
                 });
         }
 
-        // Load individual payments data
         function loadIndividualPayments() {
             individualLoading.style.display = 'flex';
             
@@ -877,7 +1059,6 @@
                 });
         }
 
-        // Render group payments table
         function renderGroupPayments() {
             groupPaymentsList.innerHTML = '';
             
@@ -906,7 +1087,6 @@
             });
         }
 
-        // Render individual payments table
         function renderIndividualPayments() {
             individualPaymentsList.innerHTML = '';
             
@@ -939,7 +1119,6 @@
             });
         }
 
-        // Populate group payments dropdown
         function populateGroupPaymentsDropdown() {
             individualGroupSelect.innerHTML = '<option value="">None</option>';
             
@@ -951,7 +1130,6 @@
             });
         }
 
-        // Add a new user
         function addUser() {
             const userName = newUserInput.value.trim();
             
@@ -967,25 +1145,22 @@
             }
         }
         
-        // Remove a user
         function removeUser(index) {
-            if (!users[index].isYou) {  // Prevent removing yourself
+            if (!users[index].isYou) {
                 users.splice(index, 1);
                 renderUsers();
                 calculatePricePerPerson();
             }
         }
         
-        // Toggle paid status
         function togglePaid(index) {
-            if (!users[index].isYou) {  // Your payment status is fixed
+            if (!users[index].isYou) {
                 users[index].isPaid = !users[index].isPaid;
                 renderUsers();
                 calculatePricePerPerson();
             }
         }
         
-        // Update user amount (for per-person payment mode)
         function updateUserAmount(index, amount) {
             if (!users[index].isYou) {
                 users[index].amount = parseFloat(amount) || 0;
@@ -993,7 +1168,6 @@
             }
         }
         
-        // Render the user list
         function renderUsers() {
             userList.innerHTML = '';
             const paymentMode = document.querySelector('input[name="payment-mode"]:checked').value;
@@ -1003,7 +1177,7 @@
                 userItem.className = 'user-item';
                 
                 let userHtml = `
-                    <span>${user.name}${user.isYou ? ' (already paid)' : ''}</span>
+                    <span>${user.name}</span>
                     <div class="user-toggle">
                         <div class="checkbox-container">
                             <input type="checkbox" id="is-paid-${index}" 
@@ -1012,7 +1186,6 @@
                             <label for="is-paid-${index}">Paid</label>
                         </div>`;
                 
-                // Add amount input field for per-person payment mode
                 if (paymentMode === 'per-person' && !user.isYou) {
                     userHtml += `
                         <div class="amount-container" style="margin-left: 10px;">
@@ -1030,7 +1203,6 @@
                 userItem.innerHTML = userHtml;
                 userList.appendChild(userItem);
                 
-                // Add event listeners
                 if (!user.isYou) {
                     const checkbox = userItem.querySelector(`#is-paid-${index}`);
                     const removeBtn = userItem.querySelector('.btn-remove');
@@ -1038,7 +1210,6 @@
                     checkbox.addEventListener('change', () => togglePaid(index));
                     removeBtn.addEventListener('click', () => removeUser(index));
                     
-                    // Add event listener for amount input if in per-person mode
                     if (paymentMode === 'per-person') {
                         const amountInput = userItem.querySelector(`#amount-${index}`);
                         amountInput.addEventListener('input', (e) => updateUserAmount(index, e.target.value));
@@ -1049,21 +1220,17 @@
             totalUsersEl.textContent = users.length;
         }
         
-        // Calculate the price per person
         function calculatePricePerPerson() {
             const totalAmount = parseFloat(groupAmountInput.value) || 0;
             const paymentMode = document.querySelector('input[name="payment-mode"]:checked').value;
             
-            // Re-render users when payment mode changes to update the UI
             renderUsers();
             
             if (totalAmount > 0) {
                 if (paymentMode === 'split-equal') {
-                    // Split equally mode - calculate from per-person price input
                     const totalUsers = users.length;
                     const pricePerPerson = parseFloat(perPersonPriceInput.value) || (totalAmount / totalUsers);
                     
-                    // Update the per person price input if it's empty or doesn't match the calculation
                     if (perPersonPriceInput.value === '' || Math.abs(pricePerPerson * totalUsers - totalAmount) > 0.01) {
                         perPersonPriceInput.value = (totalAmount / totalUsers).toFixed(2);
                         totalAutoCalculate.textContent = `Total: €${totalAmount.toFixed(2)} (${perPersonPriceInput.value} × ${totalUsers})`;
@@ -1071,7 +1238,6 @@
                     
                     pricePerPersonEl.textContent = `€${pricePerPerson.toFixed(2)}`;
                     
-                    // Update cost breakdown
                     costBreakdownEl.innerHTML = '';
                     users.forEach(user => {
                         const li = document.createElement('li');
@@ -1085,10 +1251,8 @@
                         costBreakdownEl.appendChild(li);
                     });
                 } else {
-                    // Custom per-person mode
                     pricePerPersonEl.textContent = `Varies (set individually)`;
                     
-                    // Calculate total assigned amount
                     let assignedTotal = 0;
                     users.forEach(user => {
                         if (!user.isYou) {
@@ -1096,11 +1260,9 @@
                         }
                     });
                     
-                    // Your amount is what's left
                     const yourAmount = Math.max(0, totalAmount - assignedTotal);
                     users[0].amount = yourAmount;
                     
-                    // Update cost breakdown
                     costBreakdownEl.innerHTML = '';
                     users.forEach(user => {
                         const li = document.createElement('li');
@@ -1116,11 +1278,10 @@
                 }
             } else {
                 pricePerPersonEl.textContent = '€0.00';
-                costBreakdownEl.innerHTML = '<li>You: €0.00 (already paid)</li>';
+                costBreakdownEl.innerHTML = '<li>You: €0.00</li>';
             }
         }
 
-        // Add new group payment with individual expenses
         function addGroupPayment(e) {
             e.preventDefault();
             
@@ -1142,7 +1303,6 @@
                 "Paid overall": paid
             };
             
-            // First create the group payment
             fetchData(
                 `${apiUrl}/api/database/rows/table/682/?user_field_names=true`,
                 apiToken,
@@ -1154,18 +1314,15 @@
             .then((response) => {
                 showAlert('Group payment added successfully!', 'success');
                 
-                // Get the new group payment ID
                 const newGroupPaymentId = response.id;
                 
-                // Create individual payments for each non-you user
                 let individualPromises = [];
                 
                 if (paymentMode === 'split-equal') {
-                    // Split equally using the per person price
                     const pricePerPerson = parseFloat(perPersonPriceInput.value);
                     
                     individualPromises = users
-                        .filter(user => !user.isYou) // Skip "You" since you already paid
+                        .filter(user => !user.isYou)
                         .map(user => {
                             const individualData = {
                                 "For": user.name,
@@ -1185,9 +1342,8 @@
                             );
                         });
                 } else {
-                    // Custom per-person payment
                     individualPromises = users
-                        .filter(user => !user.isYou && user.amount > 0) // Skip "You" and users with 0 amount
+                        .filter(user => !user.isYou && user.amount > 0)
                         .map(user => {
                             const individualData = {
                                 "For": user.name,
@@ -1208,26 +1364,22 @@
                         });
                 }
                 
-                // Wait for all individual payments to be created
                 return Promise.all(individualPromises);
             })
             .then(() => {
                 showAlert('All individual payments created!', 'success');
                 addGroupPaymentForm.reset();
                 
-                // Reset users to just "You"
                 users.length = 1;
                 users[0].amount = 0;
                 renderUsers();
                 calculatePricePerPerson();
                 
-                // Set payment mode back to split-equal
                 splitEqualRadio.checked = true;
                 perPersonContainer.style.display = 'flex';
                 perPersonPriceInput.value = '';
                 totalAutoCalculate.textContent = '';
                 
-                // Reload data
                 loadGroupPayments();
                 loadIndividualPayments();
             })
@@ -1236,7 +1388,6 @@
             });
         }
 
-        // Add new individual payment (original function)
         function addIndividualPayment(e) {
             e.preventDefault();
             
@@ -1272,7 +1423,6 @@
             });
         }
 
-        // Delete a group payment
         function deleteGroupPayment(id) {
             if (confirm('Are you sure you want to delete this group payment?')) {
                 fetchData(
@@ -1285,7 +1435,7 @@
                 .then(() => {
                     showAlert('Group payment deleted successfully!', 'success');
                     loadGroupPayments();
-                    loadIndividualPayments(); // Reload individual payments as they might be linked
+                    loadIndividualPayments();
                 })
                 .catch(error => {
                     showAlert(`Failed to delete group payment: ${error.message}`, 'danger');
@@ -1293,7 +1443,6 @@
             }
         }
 
-        // Delete an individual payment
         function deleteIndividualPayment(id) {
             if (confirm('Are you sure you want to delete this individual payment?')) {
                 fetchData(
@@ -1313,7 +1462,6 @@
             }
         }
 
-        // Toggle group payment paid status
         function toggleGroupPaid(id, status) {
             fetchData(
                 `${apiUrl}/api/database/rows/table/682/${id}/?user_field_names=true`,
@@ -1332,7 +1480,6 @@
             });
         }
 
-        // Toggle individual payment paid status
         function toggleIndividualPaid(id, status) {
             fetchData(
                 `${apiUrl}/api/database/rows/table/684/${id}/?user_field_names=true`,
@@ -1351,26 +1498,28 @@
             });
         }
 
-        // Update summary data
         function updateSummary() {
-            // Calculate totals
             let totalGroup = 0;
             let totalIndividual = 0;
+            let totalUnpaid = 0;
             
             groupPayments.forEach(payment => {
                 totalGroup += parseFloat(payment.Money);
             });
             
             individualPayments.forEach(payment => {
-                totalIndividual += parseFloat(payment.Money);
+                const amount = parseFloat(payment.Money);
+                totalIndividual += amount;
+                
+                if (!payment.Paid) {
+                    totalUnpaid += amount;
+                }
             });
             
-            // Update summary elements
             totalGroupEl.textContent = `€${totalGroup.toFixed(2)}`;
             totalIndividualEl.textContent = `€${totalIndividual.toFixed(2)}`;
-            remainingEl.textContent = `€${(totalGroup - totalIndividual).toFixed(2)}`;
+            remainingEl.textContent = `€${totalUnpaid.toFixed(2)}`;
             
-            // Generate summary per person
             const personSummary = {};
             
             individualPayments.forEach(payment => {
@@ -1390,7 +1539,6 @@
                 }
             });
             
-            // Render person summary
             summaryList.innerHTML = '';
             
             if (Object.keys(personSummary).length === 0) {
@@ -1416,7 +1564,6 @@
             });
         }
 
-        // Show alert message
         function showAlert(message, type) {
             const alert = document.createElement('div');
             alert.className = `alert alert-${type}`;
@@ -1429,7 +1576,6 @@
             }, 5000);
         }
 
-        // Activate tab
         function activateTab(tabId) {
             tabs.forEach(tab => {
                 if (tab.getAttribute('data-tab') === tabId) {
@@ -1447,25 +1593,18 @@
                 }
             });
             
-            // Refresh data when switching to summary tab
             if (tabId === 'summary') {
                 updateSummary();
             }
         }
 
-        // Initialize the UI
         function init() {
-            // Initialize the user list
+            setInitialTheme();
             renderUsers();
-            
-            // Initial payment mode setup
             onPaymentModeChange();
-            
-            // Check for saved credentials
             checkSavedCredentials();
         }
 
-        // Run initialization
         init();
     </script>
 </body>
