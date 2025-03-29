@@ -1239,6 +1239,10 @@
             
             groupAmountInput.value = totalAmount.toFixed(2);
             totalAutoCalculate.textContent = `Total: €${totalAmount.toFixed(2)} (${pricePerPerson.toFixed(2)} × ${totalUsers})`;
+            
+            // Fix: Make sure to update the displayed price per person when changing the per-person price
+            pricePerPersonEl.textContent = `€${pricePerPerson.toFixed(2)}`;
+            
             calculatePricePerPerson();
         }
 
@@ -1584,17 +1588,20 @@
                         totalAutoCalculate.textContent = `Total: €${totalAmount.toFixed(2)} (${perPersonPriceInput.value} × ${totalUsers})`;
                     }
                     
-                    pricePerPersonEl.textContent = `€${pricePerPerson.toFixed(2)}`;
+                    // Fix: Show the correct amount that each person pays
+                    pricePerPersonEl.textContent = `€${parseFloat(perPersonPriceInput.value).toFixed(2)}`;
                     
                     costBreakdownEl.innerHTML = '';
                     users.forEach(user => {
                         const li = document.createElement('li');
+                        // Use the same value from perPersonPriceInput for consistency
+                        const personAmount = parseFloat(perPersonPriceInput.value);
                         if (user.isYou) {
-                            li.textContent = `${user.name}: €${pricePerPerson.toFixed(2)} (already paid)`;
+                            li.textContent = `${user.name}: €${personAmount.toFixed(2)} (already paid)`;
                         } else if (user.isPaid) {
-                            li.textContent = `${user.name}: €${pricePerPerson.toFixed(2)} (paid)`;
+                            li.textContent = `${user.name}: €${personAmount.toFixed(2)} (paid)`;
                         } else {
-                            li.textContent = `${user.name}: €${pricePerPerson.toFixed(2)} (unpaid)`;
+                            li.textContent = `${user.name}: €${personAmount.toFixed(2)} (unpaid)`;
                         }
                         costBreakdownEl.appendChild(li);
                     });
