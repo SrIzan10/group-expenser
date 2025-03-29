@@ -548,6 +548,260 @@
         .price-calculation p {
             margin-bottom: 4px;
         }
+
+        /* File upload styles */
+        .file-upload {
+            border: 2px dashed var(--color-border);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+            cursor: pointer;
+            background-color: var(--bg-tertiary);
+            transition: all 0.3s ease;
+        }
+        
+        .file-upload:hover {
+            border-color: var(--color-primary);
+            background-color: rgba(74, 109, 167, 0.05);
+        }
+        
+        .file-upload input[type="file"] {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+        
+        .file-upload p {
+            margin: 0;
+            color: var(--color-text-light);
+        }
+        
+        .file-upload-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--color-primary);
+        }
+        
+        .file-list {
+            list-style: none;
+            padding: 0;
+            margin: 15px 0 0 0;
+        }
+        
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background-color: var(--bg-secondary);
+            border-radius: 6px;
+            margin-bottom: 8px;
+        }
+        
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            overflow: hidden;
+        }
+        
+        .file-name {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 250px;
+        }
+        
+        .file-size {
+            color: var(--color-text-light);
+            font-size: 0.8rem;
+        }
+        
+        .file-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .file-preview-btn, .file-remove-btn {
+            background: none;
+            border: none;
+            padding: 4px;
+            cursor: pointer;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .file-preview-btn {
+            color: var(--color-info);
+        }
+        
+        .file-remove-btn {
+            color: var(--color-danger);
+        }
+        
+        .file-preview-btn:hover, .file-remove-btn:hover {
+            background-color: var(--bg-tertiary);
+        }
+        
+        .upload-progress {
+            width: 100%;
+            height: 6px;
+            margin-top: 10px;
+            border-radius: 3px;
+            overflow: hidden;
+            background-color: var(--bg-primary);
+        }
+        
+        .upload-bar {
+            height: 100%;
+            width: 0%;
+            background-color: var(--color-primary);
+            transition: width 0.3s ease;
+        }
+        
+        .receipts-container {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        
+        .receipt-thumbnail {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .receipt-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .receipt-thumbnail .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .receipt-thumbnail:hover .overlay {
+            opacity: 1;
+        }
+        
+        .receipt-thumbnail .overlay-btn {
+            background: white;
+            color: var(--color-text);
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            margin: 0 5px;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            overflow: auto;
+        }
+        
+        .modal-content {
+            position: relative;
+            margin: auto;
+            padding: 0;
+            width: 80%;
+            max-width: 900px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 28px;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.5);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-img {
+            width: 100%;
+            height: auto;
+            display: block;
+            max-height: 80vh;
+            object-fit: contain;
+        }
+        
+        .modal-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 16px;
+            color: white;
+            font-weight: bold;
+            font-size: 24px;
+            cursor: pointer;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            user-select: none;
+        }
+        
+        .modal-prev {
+            left: 15px;
+        }
+        
+        .modal-next {
+            right: 15px;
+        }
+        
+        .receipts-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -629,6 +883,22 @@
                             <label for="group-notes">Notes</label>
                             <textarea id="group-notes" rows="3"></textarea>
                         </div>
+                        
+                        <!-- Receipt Upload Section -->
+                        <div class="form-group">
+                            <label>Receipts</label>
+                            <div class="file-upload" id="receipt-upload">
+                                <div class="file-upload-icon">📄</div>
+                                <p>Drag & drop receipts here or click to browse</p>
+                                <p class="file-size">(JPG, PNG, PDF up to 5MB each)</p>
+                                <input type="file" id="receipt-input" multiple accept="image/jpeg,image/png,application/pdf">
+                                <div class="upload-progress">
+                                    <div class="upload-bar" id="upload-progress-bar"></div>
+                                </div>
+                            </div>
+                            <ul class="file-list" id="receipt-file-list"></ul>
+                        </div>
+                        
                         <div class="form-group">
                             <label for="group-paid">Paid Overall</label>
                             <select id="group-paid">
@@ -637,7 +907,6 @@
                             </select>
                         </div>
                         
-                        <!-- New user management section -->
                         <div class="form-group">
                             <label>Split Between</label>
                             <div class="user-add">
@@ -687,6 +956,7 @@
                                 <th>Amount</th>
                                 <th>Paid</th>
                                 <th>Notes</th>
+                                <th>Receipts</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -790,12 +1060,23 @@
         </div>
     </div>
 
+    <!-- Modal for image preview -->
+    <div id="receipt-modal" class="modal">
+        <span class="modal-close" id="modal-close">&times;</span>
+        <div class="modal-content">
+            <img id="modal-img" class="modal-img" src="">
+        </div>
+        <span class="modal-nav modal-prev" id="modal-prev">❮</span>
+        <span class="modal-nav modal-next" id="modal-next">❯</span>
+    </div>
+
     <script>
         // Global variables
         let apiUrl = '';
         let apiToken = '';
         let groupPayments = [];
         let individualPayments = [];
+        let uploadedFiles = []; // Array to store uploaded file info
 
         // DOM elements
         const authSection = document.getElementById('auth-section');
@@ -843,6 +1124,19 @@
         const perPersonPriceInput = document.getElementById('per-person-price');
         const perPersonContainer = document.getElementById('per-person-container');
         const totalAutoCalculate = document.getElementById('total-auto-calculate');
+        
+        // File upload elements
+        const receiptInput = document.getElementById('receipt-input');
+        const receiptFileList = document.getElementById('receipt-file-list');
+        const uploadProgressBar = document.getElementById('upload-progress-bar');
+        
+        // Modal elements
+        const receiptModal = document.getElementById('receipt-modal');
+        const modalImg = document.getElementById('modal-img');
+        const modalClose = document.getElementById('modal-close');
+        const modalPrev = document.getElementById('modal-prev');
+        const modalNext = document.getElementById('modal-next');
+        let currentImgIndex = 0;
         
         // List of users (You are always included by default)
         const users = [{ name: 'You', isPaid: true, isYou: true, amount: 0 }];
@@ -911,6 +1205,11 @@
         perPersonPriceInput.addEventListener('input', updateTotalFromPerPersonPrice);
         splitEqualRadio.addEventListener('change', onPaymentModeChange);
         perPersonRadio.addEventListener('change', onPaymentModeChange);
+        
+        receiptInput.addEventListener('change', handleFileSelect);
+        modalClose.addEventListener('click', closeModal);
+        modalPrev.addEventListener('click', showPrevImage);
+        modalNext.addEventListener('click', showNextImage);
         
         function onPaymentModeChange() {
             const paymentMode = document.querySelector('input[name="payment-mode"]:checked').value;
@@ -1073,26 +1372,66 @@
             
             if (groupPayments.length === 0) {
                 const row = document.createElement('tr');
-                row.innerHTML = '<td colspan="5" style="text-align: center;">No group payments found</td>';
+                row.innerHTML = '<td colspan="6" style="text-align: center;">No group payments found</td>';
                 groupPaymentsList.appendChild(row);
                 return;
             }
             
+            // Update table headers to include receipts column
+            const tableHeaders = document.querySelector('#group-payments-table thead tr');
+            if (tableHeaders && !tableHeaders.querySelector('th:nth-child(5)')) {
+                const receiptsHeader = document.createElement('th');
+                receiptsHeader.textContent = 'Receipts';
+                tableHeaders.insertBefore(receiptsHeader, tableHeaders.querySelector('th:last-child'));
+            }
+            
             groupPayments.forEach(payment => {
                 const row = document.createElement('tr');
+                
+                // Create receipts cell
+                const receiptsCell = document.createElement('td');
+                const hasReceipts = payment.Receipts && payment.Receipts.length > 0;
+                
+                if (hasReceipts) {
+                    const receiptCount = payment.Receipts.length;
+                    const receiptContainerId = `receipts-${payment.id}`;
+                    
+                    receiptsCell.innerHTML = `
+                        <div class="receipts-title">
+                            <span>${receiptCount} receipt${receiptCount !== 1 ? 's' : ''}</span>
+                            <button class="btn btn-sm" onclick="toggleReceiptView('${receiptContainerId}')">View</button>
+                        </div>
+                        <div id="${receiptContainerId}" class="receipts-container hidden"></div>
+                    `;
+                } else {
+                    receiptsCell.textContent = 'None';
+                }
+                
                 row.innerHTML = `
                     <td>${payment.Name || '-'}</td>
                     <td>€${parseFloat(payment.Money).toFixed(2)}</td>
                     <td>${payment['Paid overall'] ? '✅' : '❌'}</td>
                     <td>${payment.Notes || '-'}</td>
-                    <td class="actions">
-                        <button class="btn btn-sm btn-danger" onclick="deleteGroupPayment(${payment.id})">Delete</button>
-                        <button class="btn btn-sm" onclick="toggleGroupPaid(${payment.id}, ${!payment['Paid overall']})">
-                            ${payment['Paid overall'] ? 'Mark Unpaid' : 'Mark Paid'}
-                        </button>
-                    </td>
                 `;
+                
+                row.appendChild(receiptsCell);
+                
+                const actionsCell = document.createElement('td');
+                actionsCell.className = 'actions';
+                actionsCell.innerHTML = `
+                    <button class="btn btn-sm btn-danger" onclick="deleteGroupPayment(${payment.id})">Delete</button>
+                    <button class="btn btn-sm" onclick="toggleGroupPaid(${payment.id}, ${!payment['Paid overall']})">
+                        ${payment['Paid overall'] ? 'Mark Unpaid' : 'Mark Paid'}
+                    </button>
+                `;
+                
+                row.appendChild(actionsCell);
                 groupPaymentsList.appendChild(row);
+                
+                // Render receipts if they exist
+                if (hasReceipts) {
+                    renderReceipts(payment.Receipts, `receipts-${payment.id}`);
+                }
             });
         }
 
@@ -1305,11 +1644,17 @@
                 return;
             }
             
+            // Prepare receipts data
+            const receiptFiles = uploadedFiles.map(file => ({
+                name: file.name
+            }));
+            
             const paymentData = {
                 "Name": name,
                 "Money": amount,
                 "Notes": notes,
-                "Paid overall": paid
+                "Paid overall": paid,
+                "Receipts": receiptFiles
             };
             
             fetchData(
@@ -1378,6 +1723,10 @@
             .then(() => {
                 showAlert('All individual payments created!', 'success');
                 addGroupPaymentForm.reset();
+                
+                // Reset uploaded files
+                uploadedFiles = [];
+                receiptFileList.innerHTML = '';
                 
                 users.length = 1;
                 users[0].amount = 0;
@@ -1604,6 +1953,332 @@
             
             if (tabId === 'summary') {
                 updateSummary();
+            }
+        }
+
+        // Handle file selection
+        function handleFileSelect(event) {
+            const files = event.target.files;
+            if (!files || files.length === 0) return;
+            
+            // Process each file
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                
+                // Validate file type and size
+                if (!validateFile(file)) continue;
+                
+                // Add to UI
+                addFileToUI(file);
+                
+                // Upload the file
+                uploadFile(file);
+            }
+        }
+        
+        // Validate file (type and size)
+        function validateFile(file) {
+            const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf'];
+            const maxSize = 5 * 1024 * 1024; // 5MB
+            
+            if (!allowedTypes.includes(file.type)) {
+                showAlert('Only JPG, PNG and PDF files are allowed', 'danger');
+                return false;
+            }
+            
+            if (file.size > maxSize) {
+                showAlert(`File ${file.name} exceeds the 5MB limit`, 'danger');
+                return false;
+            }
+            
+            return true;
+        }
+        
+        // Add file to UI list
+        function addFileToUI(file) {
+            const fileId = `file-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+            const fileItem = document.createElement('li');
+            fileItem.id = fileId;
+            fileItem.className = 'file-item';
+            fileItem.innerHTML = `
+                <div class="file-info">
+                    <span class="file-name">${file.name}</span>
+                    <span class="file-size">${formatFileSize(file.size)}</span>
+                </div>
+                <div class="file-actions">
+                    <span class="upload-status">Uploading...</span>
+                </div>
+            `;
+            
+            receiptFileList.appendChild(fileItem);
+            return fileId;
+        }
+        
+        // Format file size
+        function formatFileSize(bytes) {
+            if (bytes < 1024) return bytes + ' bytes';
+            else if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+            else return (bytes / 1048576).toFixed(1) + ' MB';
+        }
+        
+        // Upload file to server
+        async function uploadFile(file) {
+            try {
+                const formData = new FormData();
+                formData.append('file', file);
+                
+                const response = await fetch(`${apiUrl}/api/user-files/upload-file/`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Token ${apiToken}`
+                    },
+                    body: formData
+                });
+                
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.description || response.statusText);
+                }
+                
+                const fileData = await response.json();
+                uploadedFiles.push(fileData);
+                
+                // Update UI to show upload success
+                updateFileUI(file.name, fileData);
+                showAlert(`Successfully uploaded ${file.name}`, 'success');
+                
+            } catch (error) {
+                showAlert(`Failed to upload ${file.name}: ${error.message}`, 'danger');
+                updateFileUI(file.name, null, true);
+            }
+        }
+        
+        // Update file UI after upload
+        function updateFileUI(fileName, fileData, isError = false) {
+            const fileItems = receiptFileList.querySelectorAll('.file-item');
+            
+            for (let item of fileItems) {
+                const nameElem = item.querySelector('.file-name');
+                
+                if (nameElem && nameElem.textContent === fileName) {
+                    const actionsElem = item.querySelector('.file-actions');
+                    
+                    if (isError) {
+                        actionsElem.innerHTML = `
+                            <span class="upload-status" style="color: var(--color-danger);">Failed</span>
+                            <button type="button" class="file-remove-btn" onclick="removeFile('${item.id}', null)">🗑️</button>
+                        `;
+                    } else {
+                        const isImage = fileData.is_image;
+                        actionsElem.innerHTML = `
+                            <span class="upload-status" style="color: var(--color-success);">Uploaded</span>
+                            ${isImage ? `<button type="button" class="file-preview-btn" onclick="previewFile('${fileData.url}')">👁️</button>` : ''}
+                            <button type="button" class="file-remove-btn" onclick="removeFile('${item.id}', '${fileData.name}')">🗑️</button>
+                        `;
+                        
+                        // Store file data in the element for later use
+                        item.dataset.fileData = JSON.stringify(fileData);
+                    }
+                    break;
+                }
+            }
+        }
+        
+        // Remove file from UI and uploaded files array
+        function removeFile(fileId, fileName) {
+            const fileItem = document.getElementById(fileId);
+            if (fileItem) {
+                if (fileName) {
+                    // Find and remove from uploadedFiles array
+                    uploadedFiles = uploadedFiles.filter(file => file.name !== fileName);
+                }
+                fileItem.remove();
+            }
+        }
+        
+        // Preview image file
+        function previewFile(url) {
+            modalImg.src = url;
+            receiptModal.style.display = 'block';
+            
+            // Set current index for navigation
+            const imageUrls = uploadedFiles
+                .filter(file => file.is_image)
+                .map(file => file.url);
+            
+            currentImgIndex = imageUrls.indexOf(url);
+        }
+        
+        // Close modal
+        function closeModal() {
+            receiptModal.style.display = 'none';
+        }
+        
+        // Show previous image
+        function showPrevImage() {
+            const imageUrls = uploadedFiles
+                .filter(file => file.is_image)
+                .map(file => file.url);
+            
+            if (imageUrls.length <= 1) return;
+            
+            currentImgIndex = (currentImgIndex - 1 + imageUrls.length) % imageUrls.length;
+            modalImg.src = imageUrls[currentImgIndex];
+        }
+        
+        // Show next image
+        function showNextImage() {
+            const imageUrls = uploadedFiles
+                .filter(file => file.is_image)
+                .map(file => file.url);
+            
+            if (imageUrls.length <= 1) return;
+            
+            currentImgIndex = (currentImgIndex + 1) % imageUrls.length;
+            modalImg.src = imageUrls[currentImgIndex];
+        }
+        
+        // Render receipts for a group payment
+        function renderReceipts(receipts, containerId) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            if (!receipts || receipts.length === 0) {
+                container.innerHTML = '<p>No receipts attached</p>';
+                return;
+            }
+            
+            receipts.forEach((receipt, index) => {
+                if (receipt.is_image) {
+                    const thumbnailDiv = document.createElement('div');
+                    thumbnailDiv.className = 'receipt-thumbnail';
+                    
+                    const img = document.createElement('img');
+                    img.src = receipt.thumbnails?.small?.url || receipt.url;
+                    img.alt = 'Receipt';
+                    
+                    const overlay = document.createElement('div');
+                    overlay.className = 'overlay';
+                    
+                    const viewBtn = document.createElement('button');
+                    viewBtn.className = 'overlay-btn';
+                    viewBtn.innerHTML = '👁️';
+                    viewBtn.onclick = () => {
+                        viewGroupReceipt(receipts, index);
+                    };
+                    
+                    overlay.appendChild(viewBtn);
+                    thumbnailDiv.appendChild(img);
+                    thumbnailDiv.appendChild(overlay);
+                    container.appendChild(thumbnailDiv);
+                } else {
+                    const linkDiv = document.createElement('div');
+                    linkDiv.className = 'receipt-thumbnail';
+                    linkDiv.style.backgroundColor = 'var(--bg-tertiary)';
+                    linkDiv.style.display = 'flex';
+                    linkDiv.style.alignItems = 'center';
+                    linkDiv.style.justifyContent = 'center';
+                    
+                    const linkIcon = document.createElement('div');
+                    linkIcon.textContent = '📄';
+                    linkIcon.style.fontSize = '2em';
+                    
+                    const overlay = document.createElement('div');
+                    overlay.className = 'overlay';
+                    
+                    const linkBtn = document.createElement('button');
+                    linkBtn.className = 'overlay-btn';
+                    linkBtn.innerHTML = '↗️';
+                    linkBtn.onclick = () => {
+                        window.open(receipt.url, '_blank');
+                    };
+                    
+                    overlay.appendChild(linkBtn);
+                    linkDiv.appendChild(linkIcon);
+                    linkDiv.appendChild(overlay);
+                    container.appendChild(linkDiv);
+                }
+            });
+        }
+        
+        // View a receipt from group payments
+        function viewGroupReceipt(receipts, index) {
+            const imageReceipts = receipts.filter(r => r.is_image);
+            if (imageReceipts.length === 0) return;
+            
+            modalImg.src = imageReceipts[index].url;
+            receiptModal.style.display = 'block';
+            currentImgIndex = index;
+            
+            // Update navigation for group receipts
+            modalPrev.onclick = () => {
+                index = (index - 1 + imageReceipts.length) % imageReceipts.length;
+                modalImg.src = imageReceipts[index].url;
+                currentImgIndex = index;
+            };
+            
+            modalNext.onclick = () => {
+                index = (index + 1) % imageReceipts.length;
+                modalImg.src = imageReceipts[index].url;
+                currentImgIndex = index;
+            };
+        }
+
+        // Make sure we prevent default drag behaviors
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropZone = document.getElementById('receipt-upload');
+            
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropZone.addEventListener(eventName, preventDefaults, false);
+            });
+            
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropZone.addEventListener(eventName, highlight, false);
+            });
+            
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropZone.addEventListener(eventName, unhighlight, false);
+            });
+            
+            function highlight() {
+                dropZone.classList.add('file-upload-active');
+            }
+            
+            function unhighlight() {
+                dropZone.classList.remove('file-upload-active');
+            }
+            
+            dropZone.addEventListener('drop', handleDrop, false);
+            
+            function handleDrop(e) {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                
+                if (files && files.length > 0) {
+                    // Convert FileList to array and process
+                    const fileArray = Array.from(files);
+                    fileArray.forEach(file => {
+                        if (validateFile(file)) {
+                            addFileToUI(file);
+                            uploadFile(file);
+                        }
+                    });
+                }
+            }
+        });
+
+        // Toggle receipt view
+        function toggleReceiptView(containerId) {
+            const container = document.getElementById(containerId);
+            if (container) {
+                container.classList.toggle('hidden');
             }
         }
 
